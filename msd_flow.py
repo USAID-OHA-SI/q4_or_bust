@@ -19,14 +19,13 @@ PSNU_FILES_KEY = 'psnu_files'
 NAT_SUBNAT_FILE_KEY = 'nat_subnat_file'
 PATH_KEY = 'path'
 ENCODING_KEY = 'encoding'
+NA_VALUES_KEY = 'na_values'
 
 _REF_TABLE_COLUMN_DTYPES: utils.ColumnDtypes = {
     'indicator (as seen in MSD)': 'category',
     'standardizeddisaggregate': 'category',
     'otherdisaggregate': 'category',
     'Fiscal Year (full year)': int,
-    'Fiscal Year': 'category',
-    'Caveat': str,
     'Summed vs. Snapshot': 'category',
     'reporting_frequency': 'category',
 }
@@ -130,6 +129,153 @@ _MODALITY_MAP = {
     "Emergency Ward": "Emergency",
 }
 
+_SUM_VS_SNAP_FLOW_COL_ORDER = [
+    'operatingunit',
+    'operatingunituid',
+    'countryname',
+    'snu1',
+    'snu1uid',
+    'snuprioritization',
+    'dreams',
+    'psnu',
+    'psnuuid',
+    'fundingagency',
+    'mech_name',
+    'mech_code',
+    'pre_rgnlztn_hq_mech_code',
+    'award_number',
+    'primepartner',
+    'prime_partner_duns',
+    'indicatortype',
+    'indicator',
+    'numeratordenom',
+    'standardizeddisaggregate',
+    'disaggregate',
+    'otherdisaggregate',
+    'otherdisaggregate_sub',
+    'sex',
+    'modality',
+    'ageasentered',
+    'trendsfine',
+    'trendssemifine',
+    'trendscoarse',
+    'hiv_treatment_status',
+    'statushiv',
+    'statustb',
+    'statuscx',
+    'categoryoptioncomboname',
+    'fiscal_year',
+    'targets',
+    'qtr1',
+    'qtr2',
+    'qtr3',
+    'qtr4',
+    'cumulative',
+    'source_name',
+    'Summed vs. Snapshot',
+    'reporting_frequency',
+]
+
+_NET_NEW_TARGETS_FLOW_COL_ORDER = [
+    '2022',
+    '2021',
+    '2020',
+    '2019',
+    '2018',
+    'operatingunit',
+    'operatingunituid',
+    'countryname',
+    'snu1',
+    'snu1uid',
+    'snuprioritization',
+    'dreams',
+    'psnu',
+    'psnuuid',
+    'fundingagency',
+    'mech_name',
+    'mech_code',
+    'pre_rgnlztn_hq_mech_code',
+    'award_number',
+    'primepartner',
+    'prime_partner_duns',
+    'indicatortype',
+    'indicator',
+    'numeratordenom',
+    'standardizeddisaggregate',
+    'disaggregate',
+    'otherdisaggregate',
+    'otherdisaggregate_sub',
+    'sex',
+    'modality',
+    'ageasentered',
+    'trendsfine',
+    'trendssemifine',
+    'trendscoarse',
+    'hiv_treatment_status',
+    'statushiv',
+    'statustb',
+    'statuscx',
+    'categoryoptioncomboname',
+    'source_name',
+    'Summed vs. Snapshot',
+    'reporting_frequency',
+]
+
+_QTR_TARGETS_AND_CUMULATIVE_FLOW_COL_ORDER = [
+    'qtr4|Running Cumulative',
+    'qtr3|Running Cumulative',
+    'qtr2|Running Cumulative',
+    'qtr1|Running Cumulative',
+    'qtr4|Targets (for Q. Ach)',
+    'qtr3|Targets (for Q. Ach)',
+    'qtr2|Targets (for Q. Ach)',
+    'qtr1|Targets (for Q. Ach)',
+    'operatingunit',
+    'operatingunituid',
+    'countryname',
+    'snu1',
+    'snu1uid',
+    'snuprioritization',
+    'dreams',
+    'psnu',
+    'psnuuid',
+    'fundingagency',
+    'mech_name',
+    'mech_code',
+    'pre_rgnlztn_hq_mech_code',
+    'award_number',
+    'primepartner',
+    'prime_partner_duns',
+    'indicatortype',
+    'indicator',
+    'numeratordenom',
+    'standardizeddisaggregate',
+    'disaggregate',
+    'otherdisaggregate',
+    'otherdisaggregate_sub',
+    'sex',
+    'modality',
+    'ageasentered',
+    'trendsfine',
+    'trendssemifine',
+    'trendscoarse',
+    'hiv_treatment_status',
+    'statushiv',
+    'statustb',
+    'statuscx',
+    'categoryoptioncomboname',
+    'fiscal_year',
+    'targets',
+    'qtr1',
+    'qtr2',
+    'qtr3',
+    'qtr4',
+    'cumulative',
+    'source_name',
+    'Summed vs. Snapshot',
+    'reporting_frequency',
+]
+
 _REUNITE_FLOW_COL_ORDER = [
     'qtr1|Targets (for Q. Ach)',
     'qtr2|Targets (for Q. Ach)',
@@ -139,6 +285,8 @@ _REUNITE_FLOW_COL_ORDER = [
     'qtr3|Running Cumulative',
     'qtr2|Running Cumulative',
     'qtr1|Running Cumulative',
+    'fiscal_year',
+    'targets',
     'qtr1',
     'qtr2',
     'qtr3',
@@ -148,46 +296,42 @@ _REUNITE_FLOW_COL_ORDER = [
     'countryname',
     'snu1',
     'snu1uid',
-    'psnu',
-    'psnuuid',
     'snuprioritization',
     'dreams',
-    'primepartner',
+    'psnu',
+    'psnuuid',
     'fundingagency',
-    'mech_code',
     'mech_name',
+    'mech_code',
     'pre_rgnlztn_hq_mech_code',
-    'prime_partner_duns',
     'award_number',
+    'primepartner',
+    'prime_partner_duns',
+    'indicatortype',
     'indicator',
     'numeratordenom',
-    'indicatortype',
-    'disaggregate',
     'standardizeddisaggregate',
-    'categoryoptioncomboname',
+    'disaggregate',
+    'otherdisaggregate',
+    'otherdisaggregate_sub',
+    'sex',
+    'modality',
     'ageasentered',
     'trendsfine',
     'trendssemifine',
     'trendscoarse',
-    'sex',
+    'hiv_treatment_status',
     'statushiv',
     'statustb',
     'statuscx',
-    'hiv_treatment_status',
-    'otherdisaggregate',
-    'otherdisaggregate_sub',
-    'modality',
-    'qtr4',
+    'categoryoptioncomboname',
     'source_name',
-    'Fiscal Year',
-    'Caveat',
     'Summed vs. Snapshot',
     'reporting_frequency',
-    'fiscal_year',
-    'targets',
+    'qtr4',
 ]
 
-_CLEAN_FIELDS_COL_MAP = {
+_CLEAN_FIELDS_COL_RENAME_MAP = {
     'Results': 'results',
     'Targets': 'targets',
     'Cumulative': 'cumulative',
@@ -211,43 +355,41 @@ _CLEAN_FIELDS_FLOW_COL_ORDER = [
     'countryname',
     'snu1',
     'snu1uid',
-    'psnu',
-    'psnuuid',
     'snuprioritization',
     'dreams',
-    'primepartner',
+    'psnu',
+    'psnuuid',
     'fundingagency',
-    'mech_code',
     'mech_name',
+    'mech_code',
     'pre_rgnlztn_hq_mech_code',
-    'prime_partner_duns',
     'award_number',
+    'primepartner',
+    'prime_partner_duns',
+    'indicatortype',
     'indicator',
     'numeratordenom',
-    'indicatortype',
-    'disaggregate',
     'standardizeddisaggregate',
-    'categoryoptioncomboname',
+    'disaggregate',
+    'otherdisaggregate',
+    'otherdisaggregate_sub',
+    'sex',
+    'modality',
     'ageasentered',
     'trendsfine',
     'trendssemifine',
     'trendscoarse',
-    'sex',
+    'hiv_treatment_status',
     'statushiv',
     'statustb',
     'statuscx',
-    'hiv_treatment_status',
-    'otherdisaggregate',
-    'otherdisaggregate_sub',
-    'modality',
+    'categoryoptioncomboname',
     'source_name',
-    'Fiscal Year',
-    'Caveat',
     'Summed vs. Snapshot',
     'reporting_frequency',
 ]
 
-_UPDATE_FIELD_NAMES_RENAME_MAP = {
+_UPDATE_FIELD_NAMES_COL_RENAME_MAP = {
     'statushiv': 'Status HIV',
     'statustb': 'Status TB',
     'statuscx': 'Status CX',
@@ -272,118 +414,221 @@ _UPDATE_FIELD_NAMES_RENAME_MAP = {
     'operatingunit': 'operating_unit',
     'dreams': 'DREAMS',
     'standardizeddisaggregate': 'standardized_disaggregate',
-    }
+}
+
+_UPDATE_FIELD_NAMES_FLOW_COL_ORDER = [
+    'operating_unit',
+    'country_name',
+    'modality',
+    'funding_agency',
+    'quarter',
+    'key_pops',
+    'community_facility',
+    'index',
+    'Current Quarter',
+    'Results or Targets',
+    'FY',
+    'values',
+    'cumulative',
+    'targets',
+    'results',
+    'Running Cumulative',
+    'Targets (for Q. Ach)',
+    'operating_unit_uid',
+    'SNU',
+    'SNU UID',
+    'PSNU',
+    'PSNU UID',
+    'SNU_prioritization',
+    'indicator',
+    'numerator_denom',
+    'indicator_type',
+    'disaggregate',
+    'standardized_disaggregate',
+    'category_option_combo_name',
+    'age_as_entered',
+    'age_coarse',
+    'sex',
+    'Status HIV',
+    'other_disaggregate',
+    'source_name',
+    'DREAMS',
+    'mech_name',
+    'mech_code',
+    'pre_rgnlztn_hq_mech_code',
+    'award_number',
+    'prime_partner',
+    'prime_partner_duns',
+    'otherdisaggregate_sub',
+    'age_fine',
+    'age_semifine',
+    'HIV_treatment_status',
+    'Status TB',
+    'Status CX',
+]
+
+_PARTNER_TYPE_FLOW_COL_ORDER = [
+    'Partner Type',
+    'G2G',
+    'indicator',
+    'community_facility',
+    'modality',
+    'otherdisaggregate_sub',
+    'mech_code',
+    'pre_rgnlztn_hq_mech_code',
+    'SNU UID',
+    'standardized_disaggregate',
+    'prime_partner_duns',
+    'results',
+    'SNU_prioritization',
+    'Running Cumulative',
+    'index',
+    'PSNU',
+    'Status TB',
+    'operating_unit_uid',
+    'age_coarse',
+    'HIV_treatment_status',
+    'Targets (for Q. Ach)',
+    'PSNU UID',
+    'award_number',
+    'prime_partner',
+    'values',
+    'indicator_type',
+    'targets',
+    'age_fine',
+    'age_semifine',
+    'Results or Targets',
+    'Status CX',
+    'other_disaggregate',
+    'disaggregate',
+    'FY',
+    'country_name',
+    'age_as_entered',
+    'funding_agency',
+    'SNU',
+    'numerator_denom',
+    'source_name',
+    'mech_name',
+    'Status HIV',
+    'sex',
+    'cumulative',
+    'category_option_combo_name',
+    'operating_unit',
+    'DREAMS',
+    'key_pops',
+    'Current Quarter',
+    'quarter',
+]
+
+_KNOWN_ISSUES_FLOW_COL_ORDER = [
+    'Partner Type',
+    'G2G',
+    'exclude due to known issue',
+    'indicator',
+    'community_facility',
+    'modality',
+    'otherdisaggregate_sub',
+    'mech_code',
+    'pre_rgnlztn_hq_mech_code',
+    'SNU UID',
+    'standardized_disaggregate',
+    'prime_partner_duns',
+    'results',
+    'SNU_prioritization',
+    'Running Cumulative',
+    'index',
+    'PSNU',
+    'Status TB',
+    'operating_unit_uid',
+    'age_coarse',
+    'HIV_treatment_status',
+    'Targets (for Q. Ach)',
+    'PSNU UID',
+    'award_number',
+    'prime_partner',
+    'values',
+    'indicator_type',
+    'targets',
+    'age_fine',
+    'age_semifine',
+    'Results or Targets',
+    'Status CX',
+    'other_disaggregate',
+    'disaggregate',
+    'FY',
+    'country_name',
+    'age_as_entered',
+    'funding_agency',
+    'SNU',
+    'numerator_denom',
+    'source_name',
+    'mech_name',
+    'Status HIV',
+    'sex',
+    'cumulative',
+    'category_option_combo_name',
+    'operating_unit',
+    'DREAMS',
+    'key_pops',
+    'Current Quarter',
+    'quarter',
+]
 
 _REMOVE_FUTURE_YEARS_FLOW_COL_ORDER = [
-    'operating_unit',
-    'country_name',
-    'modality',
-    'funding_agency',
     'FY',
     'quarter',
-    'values',
-    'Targets (for Q. Ach)',
-    'Running Cumulative',
-    'targets',
-    'index',
-    'community_facility',
-    'key_pops',
-    'Current Quarter',
-    'cumulative',
-    'results',
-    'Results or Targets',
-    'operating_unit_uid',
-    'SNU',
-    'SNU UID',
-    'PSNU',
-    'PSNU UID',
-    'SNU_prioritization',
-    'DREAMS',
-    'prime_partner',
-    'mech_code',
-    'mech_name',
-    'pre_rgnlztn_hq_mech_code',
-    'prime_partner_duns',
-    'award_number',
-    'indicator',
-    'numerator_denom',
-    'indicator_type',
-    'disaggregate',
-    'standardized_disaggregate',
-    'category_option_combo_name',
-    'age_as_entered',
-    'age_fine',
-    'age_semifine',
-    'age_coarse',
-    'sex',
-    'Status HIV',
-    'Status TB',
-    'Status CX',
-    'HIV_treatment_status',
-    'other_disaggregate',
-    'otherdisaggregate_sub',
-    'source_name',
+    'exclude due to known issue',
     'Partner Type',
     'G2G',
-    'Fiscal Year',
-    'Caveat',
-    'reporting_frequency',
+    'indicator',
+    'community_facility',
+    'modality',
+    'otherdisaggregate_sub',
+    'mech_code',
+    'pre_rgnlztn_hq_mech_code',
+    'SNU UID',
+    'standardized_disaggregate',
+    'prime_partner_duns',
+    'results',
+    'SNU_prioritization',
+    'Running Cumulative',
+    'index',
+    'PSNU',
+    'Status TB',
+    'operating_unit_uid',
+    'age_coarse',
+    'HIV_treatment_status',
+    'Targets (for Q. Ach)',
+    'PSNU UID',
+    'award_number',
+    'prime_partner',
+    'values',
+    'indicator_type',
+    'targets',
+    'age_fine',
+    'age_semifine',
+    'Results or Targets',
+    'Status CX',
+    'other_disaggregate',
+    'disaggregate',
+    'country_name',
+    'age_as_entered',
+    'funding_agency',
+    'SNU',
+    'numerator_denom',
+    'source_name',
+    'mech_name',
+    'Status HIV',
+    'sex',
+    'cumulative',
+    'category_option_combo_name',
+    'operating_unit',
+    'DREAMS',
+    'key_pops',
+    'Current Quarter',
 ]
 
-_HYPER_ORDER = [
-    'FY',
-    'quarter',
-    'Partner Type',
-    'G2G',
-    'key_pops',
-    'community_facility',
-    'index',
-    'Current Quarter',
-    'Results or Targets',
-    'values',
-    'cumulative',
-    'targets',
-    'results',
-    'Running Cumulative',
-    'Targets (for Q. Ach)',
-    'operating_unit',
-    'operating_unit_uid',
-    'country_name',
-    'SNU',
-    'SNU UID',
-    'SNU_prioritization',
-    'DREAMS',
-    'PSNU',
-    'PSNU UID',
-    'funding_agency',
-    'mech_name',
-    'mech_code',
-    'pre_rgnlztn_hq_mech_code',
-    'award_number',
-    'prime_partner',
-    'prime_partner_duns',
-    'indicator_type',
-    'indicator',
-    'numerator_denom',
-    'standardized_disaggregate',
-    'disaggregate',
-    'other_disaggregate',
-    'otherdisaggregate_sub',
-    'sex',
-    'modality',
-    'age_as_entered',
-    'age_fine',
-    'age_semifine',
-    'age_coarse',
-    'HIV_treatment_status',
-    'Status HIV',
-    'Status TB',
-    'Status CX',
-    'category_option_combo_name',
-    'source_name',
-    'exclude due to known issue'
-]
-_HYPER_ORDER_AND_POSTGRES_MAP = {
+_HYPER_ORDER_AND_POSTGRES_COL_RENAME_MAP = {
     'FY': 'fy',
     'quarter': 'quarter',
     'values': 'values',
@@ -434,41 +679,44 @@ _HYPER_ORDER_AND_POSTGRES_MAP = {
     'source_name': 'source_name',
     'Partner Type': 'partner_type',
     'G2G': 'g2g',
+    'exclude due to known issue': 'exclude_due_to_known_issue',
 }
 
 
-def _import_reference_table(base_directory: str, ref_table: Dict[str, str]) -> pd.DataFrame:
+def _import_reference_table(base_directory: str, ref_table: Dict[str, Any]) -> pd.DataFrame:
     """Import Reference Table."""
     # Read CSV file
     df = utils.read_csv(base_directory=base_directory,
                         file_relative_path=ref_table[PATH_KEY],
                         encoding=ref_table[ENCODING_KEY],
+                        na_values=ref_table[NA_VALUES_KEY],
                         column_dtypes=_REF_TABLE_COLUMN_DTYPES)
-    df = df.drop(columns=['Caveat', 'Fiscal Year'], axis=1)
     return df
 
 
-def _import_partner_type_table(base_directory: str, partner_type_table: Dict[str, str]) -> pd.DataFrame:
+def _import_partner_type_table(base_directory: str, partner_type_table: Dict[str, Any]) -> pd.DataFrame:
     """Import Reference Table."""
     # Read CSV file
     df = utils.read_csv(base_directory=base_directory,
                         file_relative_path=partner_type_table[PATH_KEY],
                         encoding=partner_type_table[ENCODING_KEY],
+                        na_values=partner_type_table[NA_VALUES_KEY],
                         column_dtypes=_PARTNER_TYPE_TABLE_COLUMN_DTYPES)
     return df
 
 
-def _import_known_issues_table(base_directory: str, known_issues_table: Dict[str, str]) -> pd.DataFrame:
+def _import_known_issues_table(base_directory: str, known_issues_table: Dict[str, Any]) -> pd.DataFrame:
     """Import Reference Table."""
     # Read CSV file
     df = utils.read_csv(base_directory=base_directory,
                         file_relative_path=known_issues_table[PATH_KEY],
                         encoding=known_issues_table[ENCODING_KEY],
+                        na_values=known_issues_table[NA_VALUES_KEY],
                         column_dtypes=_KNOWN_ISSUES_TABLE_COLUMN_DTYPES)
     return df
 
 
-def _import_psnu_files(base_directory: str, psnu_files: List[Dict[str, str]]) -> pd.DataFrame:
+def _import_psnu_files(base_directory: str, psnu_files: List[Dict[str, Any]]) -> pd.DataFrame:
     """Read and merge all PSNU files."""
     # Read all CSV files
     dfs = []
@@ -476,15 +724,13 @@ def _import_psnu_files(base_directory: str, psnu_files: List[Dict[str, str]]) ->
         df = utils.read_csv(base_directory=base_directory,
                             file_relative_path=psnu_file[PATH_KEY],
                             encoding=psnu_file[ENCODING_KEY],
+                            na_values=psnu_file[NA_VALUES_KEY],
                             column_dtypes=_PSNU_FILE_COLUMN_DTYPES)
 
-        # convert [mech_code] to match flow
-        utils.set_category_column(df=df, column='mech_code', value_map={"00000": "0", "00001": "1"})
-
-        # convert [prime_partner_duns] to match flow (None -> "Dedup")
-        utils.add_category(df=df, column='prime_partner_duns', category="Dedup")
-        utils.set_category_column(df=df, column='prime_partner_duns',
-                                  values=df['prime_partner_duns'].where(cond=df['primepartner'] != "Dedup", other="Dedup"))
+        # convert [mech_code] to match flow, removing leading zeroes and changing non-numeric to None
+        utils.set_category_column(df=df, column='mech_code',
+                                  values=df['mech_code'].apply(lambda x: str(int(x)) if x.isnumeric() else None),
+                                  recalc_categories=True)
 
         dfs.append(df)
 
@@ -495,11 +741,12 @@ def _import_psnu_files(base_directory: str, psnu_files: List[Dict[str, str]]) ->
     return df
 
 
-def _import_nat_subnat_file(base_directory: str, nat_subnat_file: Dict[str, str]) -> pd.DataFrame:
+def _import_nat_subnat_file(base_directory: str, nat_subnat_file: Dict[str, Any]) -> pd.DataFrame:
     """Read Nat/Subnat file."""
     df = utils.read_csv(base_directory=base_directory,
                         file_relative_path=nat_subnat_file[PATH_KEY],
                         encoding=nat_subnat_file[ENCODING_KEY],
+                        na_values=nat_subnat_file[NA_VALUES_KEY],
                         column_dtypes=_NAT_SUBNAT_FILE_COLUMN_DTYPES)
     return df
 
@@ -522,11 +769,13 @@ def _sum_vs_snap(input_df: pd.DataFrame, lookup_df: pd.DataFrame) -> pd.DataFram
     # Remove Field: [indicator (as seen in MSD)], [Fiscal Year (full year)]
     df.drop(columns=['indicator (as seen in MSD)', 'Fiscal Year (full year)'], inplace=True)
 
+    # Reorder columns to match Tableau flow output
+    df = df.reindex(columns=_SUM_VS_SNAP_FLOW_COL_ORDER)
+
     return df
 
 
-def _net_new_targets(input_df: pd.DataFrame, start_fiscal_year: int,
-                     current_fiscal_year: int, current_quarter: str) -> pd.DataFrame:
+def _net_new_targets(input_df: pd.DataFrame, start_fiscal_year: int, target_fiscal_year: int) -> pd.DataFrame:
     """Calculate Net New Targets."""
     df = input_df.copy(deep=False)
 
@@ -534,25 +783,34 @@ def _net_new_targets(input_df: pd.DataFrame, start_fiscal_year: int,
     df = df[df['indicator'] == "TX_CURR"]
     utils.set_category_column(df=df, column='indicator', value="TX_NET_NEW")
     df = df[df['standardizeddisaggregate'] != "Age/Sex/ARVDispense/HIVStatus"]
-    df = df[~(df['targets'].isnull() & df['cumulative'].isnull())]
+    df = df[~(df['targets'].isna() & df['cumulative'].isna())]
 
     loc = 0
-    target_fiscal_year = current_fiscal_year if current_quarter != "Q4" else current_fiscal_year + 1
+    new_cols = []
     for year in range(start_fiscal_year, target_fiscal_year):
         df[f'{year} Cumulative'] = df['cumulative'].where(cond=df['fiscal_year'] == year, other=np.NaN)
         df[f'{year + 1} Targets'] = df['targets'].where(cond=df['fiscal_year'] == year + 1, other=np.NaN)
-        df.insert(loc, f'{year + 1}', df[f'{year + 1} Targets'].fillna(0) - df[f'{year} Cumulative'].fillna(0))
+        new_col = f'{year + 1}'
+        df.insert(loc, new_col, df[f'{year + 1} Targets'].fillna(0) - df[f'{year} Cumulative'].fillna(0))
+        new_cols.append(new_col)
         df.drop(columns=[f'{year} Cumulative', f'{year + 1} Targets'], inplace=True)
         loc += 1
 
     df.drop(columns=['fiscal_year', 'targets', 'cumulative', 'qtr1', 'qtr2', 'qtr3', 'qtr4'], inplace=True)
 
+    # the following returns an empty df, perhaps too many columns
+    # df = df.groupby(list(df.columns.difference(new_cols)), observed=True, as_index=False).sum()
+    unique_df = df.drop(columns=new_cols).drop_duplicates().reset_index()
+    indexed_df = unique_df.merge(df, how="left")[['index'] + new_cols]
+    agg_df = indexed_df.groupby('index', as_index=False).sum()
+    df = unique_df.merge(agg_df, how="left").drop(columns=['index'])
+
     return df
 
 
-def _make_fy_rows(input_df: pd.DataFrame, start_fiscal_year: int, current_fiscal_year: int) -> pd.DataFrame:
+def _make_fy_rows(input_df: pd.DataFrame, start_fiscal_year: int, target_fiscal_year: int) -> pd.DataFrame:
     """Create separate row per year."""
-    value_vars = [f"{year + 1}" for year in range(start_fiscal_year, current_fiscal_year)]
+    value_vars = [f"{year + 1}" for year in range(start_fiscal_year, target_fiscal_year)]
     id_vars = input_df.columns.difference(value_vars, sort=False)
     df = input_df.melt(id_vars=id_vars, value_vars=value_vars, var_name='fiscal_year', value_name='targets')
     df.loc[:, 'fiscal_year'] = pd.to_numeric(df['fiscal_year'], errors='raise')
@@ -561,8 +819,8 @@ def _make_fy_rows(input_df: pd.DataFrame, start_fiscal_year: int, current_fiscal
     utils.move_column(df, "fiscal_year", 0)
     utils.move_column(df, "targets", 0)
 
-    # Filter (Exclude)
-    df = df[df['targets'] != 0]
+    # Filter (exclude)
+    df = df[~(df['targets'].isna() | (df['targets'] == 0))]
 
     # create qtr columns
     for qtr in range(1, 5):
@@ -612,6 +870,9 @@ def _qtr_targets_and_cumulative(input_df: pd.DataFrame) -> pd.DataFrame:
     other = df['qtr1'].fillna(0) + df['qtr2'].fillna(0) + df['qtr3'].fillna(0) + df['qtr4'].fillna(0)
     df.insert(0, 'qtr4|Running Cumulative', df['qtr4'].where(cond=cond, other=other))
     del cond, other
+
+    # Reorder columns to match Tableau flow output
+    df = df.reindex(columns=_QTR_TARGETS_AND_CUMULATIVE_FLOW_COL_ORDER)
 
     return df
 
@@ -704,7 +965,7 @@ def _clean_fields(input_df: pd.DataFrame) -> pd.DataFrame:
 
     # Create columns for [Results or Targets] values
     df_pivot = df.pivot(columns='Results or Targets', values='values')
-    df_pivot.rename(columns=_CLEAN_FIELDS_COL_MAP, inplace=True)
+    df_pivot.rename(columns=_CLEAN_FIELDS_COL_RENAME_MAP, inplace=True)
     df = df.join(df_pivot, how='outer')
 
     # Filter (exclude)
@@ -816,18 +1077,18 @@ def _clean_fields(input_df: pd.DataFrame) -> pd.DataFrame:
 def _update_field_names(input_df: pd.DataFrame, current_fyq: str) -> pd.DataFrame:
     df = input_df.copy(deep=False)
 
-    # Remove Field: [Summed vs. Snapshot]
-    df.drop(columns=['Summed vs. Snapshot'], inplace=True)
+    # Remove Field: [Summed vs. Snapshot], [reporting_frequency]
+    df.drop(columns=['Summed vs. Snapshot', 'reporting_frequency'], inplace=True)
 
     # Calculated Field: [Current Quarter] (insert)
     utils.set_category_column(df=df, column='Current Quarter', value=current_fyq)
 
-    # Match Tableau flow output
-    utils.move_column(df, "Current Quarter", 4)
-
     # Rename Fields
-    df.rename(columns=_UPDATE_FIELD_NAMES_RENAME_MAP,
+    df.rename(columns=_UPDATE_FIELD_NAMES_COL_RENAME_MAP,
               inplace=True)
+
+    # Reorder columns to match Tableau flow output
+    df = df.reindex(columns=_UPDATE_FIELD_NAMES_FLOW_COL_ORDER)
 
     return df
 
@@ -845,6 +1106,9 @@ def _partner_type(input_df: pd.DataFrame, lookup_df: pd.DataFrame) -> pd.DataFra
 
     # Remove Field: [Mechanism ID]
     df.drop(columns=['Mechanism ID'], inplace=True)
+
+    # Reorder columns to match Tableau flow output
+    df = df.reindex(columns=_PARTNER_TYPE_FLOW_COL_ORDER)
 
     return df
 
@@ -865,6 +1129,9 @@ def _known_issues(input_df: pd.DataFrame, lookup_df: pd.DataFrame) -> pd.DataFra
 
     # Remove Fields: ['period', 'operatingunit]
     df.drop(columns=['period', 'operatingunit'], inplace=True)
+
+    # Reorder columns to match Tableau flow output
+    df = df.reindex(columns=_KNOWN_ISSUES_FLOW_COL_ORDER)
 
     return df
 
@@ -1073,9 +1340,6 @@ def _prev_vlc_cumulative(input_df: pd.DataFrame, current_fy: str) -> pd.DataFram
     # Calculated Field: [source_name] (update)
     utils.set_category_column(df=df, column='source_name', value="Derived")
 
-    # Filter (Exclude)
-    df = df[~(df['values'] == 0)]
-
     return df
 
 
@@ -1102,9 +1366,6 @@ def _curr_vlc_cumulative(input_df: pd.DataFrame, current_fyq_start_date: datetim
     # Calculated Field: [source_name] (update)
     utils.set_category_column(df=df, column='source_name', value="Derived")
 
-    # Filter (Exclude)
-    df = df[~(df['values'] == 0)]
-
     return df
 
 
@@ -1121,10 +1382,10 @@ def _remove_future_years(main_df: pd.DataFrame,
     df.drop(columns=['quarter calendar date'], inplace=True)
 
     # Filter (Exclude)
-    df = df[~(df['quarter'].apply(lambda x: utils.fyq_compare(x, current_fyq)) > 0)]
+    df = df[~((df['quarter'].str[5] == 'Q') & (df['quarter'].str[:7] > current_fyq))]
 
     # Reorder columns to match flow output
-    df = df.reindex(columns=_HYPER_ORDER)
+    df = df.reindex(columns=_REMOVE_FUTURE_YEARS_FLOW_COL_ORDER)
 
     return df
 
@@ -1132,11 +1393,11 @@ def _remove_future_years(main_df: pd.DataFrame,
 def _hyper_order_and_postgres(main_df: pd.DataFrame) -> pd.DataFrame:
     """Restructure dataframe to match .hyper flow ouptput"""
     # Reorder columns to match .hyper flow output
-    hyper_flow_order = _HYPER_ORDER_AND_POSTGRES_MAP.keys()
+    hyper_flow_order = _HYPER_ORDER_AND_POSTGRES_COL_RENAME_MAP.keys()
     df = main_df.reindex(columns=hyper_flow_order)
 
     # Rename Fields
-    df.rename(columns=_HYPER_ORDER_AND_POSTGRES_MAP, inplace=True)
+    df.rename(columns=_HYPER_ORDER_AND_POSTGRES_COL_RENAME_MAP, inplace=True)
 
     return df
 
@@ -1170,6 +1431,7 @@ def transform(event: Dict[str, Any]) -> pd.DataFrame:
     file_locators = event[FILE_LOCATORS_KEY]
     base_directory = file_locators[BASE_DIRECTORY_KEY]
 
+    target_fiscal_year = current_fiscal_year if current_quarter != "Q4" else current_fiscal_year + 1
     current_fy = utils.fy_from_fiscal_year(current_fiscal_year)
     current_fyq = utils.fyq_from_fiscal_year_and_quarter(current_fiscal_year, current_quarter)
     current_fyq_start_date = utils.date_from_fiscal_year_and_quarter(current_fiscal_year, current_quarter)
@@ -1201,14 +1463,13 @@ def transform(event: Dict[str, Any]) -> pd.DataFrame:
     net_new_df = main_df.copy(deep=True)
     net_new_df = _net_new_targets(input_df=net_new_df,
                                   start_fiscal_year=start_fiscal_year,
-                                  current_fiscal_year=current_fiscal_year,
-                                  current_quarter=current_quarter)
+                                  target_fiscal_year=target_fiscal_year)
     # utils.write_csv(net_new_df, "net_new_targets", compare=True)
 
     # Create separate row per year
     net_new_df = _make_fy_rows(input_df=net_new_df,
                                start_fiscal_year=start_fiscal_year,
-                               current_fiscal_year=current_fiscal_year)
+                               target_fiscal_year=target_fiscal_year)
     # utils.write_csv(net_new_df, "make_fy_rows", compare=True)
 
     # Create quarterly targets & running cumulative
@@ -1278,9 +1539,9 @@ def transform(event: Dict[str, Any]) -> pd.DataFrame:
         _remove_future_years(main_df=main_df, vlc_df=vlc_df, prev_vlc_df=prev_vlc_df, curr_vlc_df=curr_vlc_df,
                              current_fyq=current_fyq)
     del vlc_df, prev_vlc_df, curr_vlc_df
-    utils.write_csv(main_df, "remove_future", compare=True)
+    # utils.write_csv(main_df, "remove_future", compare=True)
 
     # Restructure dataframe to match hyper flow output
     main_df = _hyper_order_and_postgres(main_df=main_df)
-
+    #utils.write_csv(main_df, "hyper_order_and_postgres", compare=False)
     return main_df

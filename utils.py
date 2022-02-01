@@ -9,19 +9,21 @@ import numpy as np
 import pandas as pd
 from pandas.api.types import union_categoricals
 
-ColumnDtypes = Dict[str, Union[Type, str]]
-
-_DEBUG_BASE_PATH = r"C:\Users\khashkes\Documents\USAID_Credence\Projects\DDC\2021 Q4\Debug"
-# DEBUG_BASE_PATH = r"~/Debug"
-# DEBUG_BASE_PATH = r"s3://e1-appdev-ddc-quaterly-analytics/Debug"
-_DEBUG_WRITE_ENCODING = "utf-8-sig"
-
 _PLATFORM = platform.system()
 print(f"Running on {_PLATFORM}")
+
+#_DEBUG_BASE_DIRECTORY = r"C:\Users\khashkes\Documents\USAID_Credence\Projects\DDC\2021 Q4\Debug"
+# _DEBUG_BASE_DIRECTORY = r"~/Debug"
+# _DEBUG_BASE_DIRECTORY = r"s3://e1-devtest-ddc-gov-usaid/ddc-quarterly-analytics/output"
+_DEBUG_WRITE_ENCODING = "utf-8-sig"
+
 if _PLATFORM == 'Windows':
     _CSV_DATE_FORMAT = "%#m/%#d/%Y"
 else:
     _CSV_DATE_FORMAT = "%-m/%-d/%Y"
+
+
+ColumnDtypes = Dict[str, Union[Type, str]]
 
 
 def fiscal_year_and_quarter_from_date(dt: datetime) -> Tuple[int, str]:
@@ -221,60 +223,62 @@ def concatenate_dfs(dfs: List[pd.DataFrame]) -> pd.DataFrame:
     return pd.concat(dfs, ignore_index=True)
 
 
-def sort_text_file(base_path: str, input_file_name: str, output_file_name: str):
+def sort_text_file(base_directory: str, input_file_relative_path: str, output_file_relative_path: str):
     """Sort text file.
 
     Args:
-        base_path (str): Base path for input and output files
-        input_file_name (str): Input file
-        output_file_name (str): Output file
+        base_directory (str): Base path for input and output files
+        input_file_relative_path (str): Input file
+        output_file_relative_path (str): Output file
     """
     if _PLATFORM != 'Windows':
         return
-    input_file_path = os.path.join(base_path, input_file_name)
-    output_file_path = os.path.join(base_path, output_file_name)
-    ret_code = os.system(f'cmd /c sort "{input_file_path}" /o "{output_file_path}"')
+    input_file_relative_path = os.path.join(base_directory, input_file_relative_path)
+    output_file_relative_path = os.path.join(base_directory, output_file_relative_path)
+    ret_code = os.system(f'cmd /c sort "{input_file_relative_path}" /o "{output_file_relative_path}"')
     if ret_code != 0:
-        print(f'Failed to sort file {input_file_path}')
+        print(f'Failed to sort file {input_file_relative_path}')
 
 
-def compare_text_files(base_path: str, file1_name: str, file2_name: str):
+def compare_text_files(base_directory: str, file1_relative_path: str, file2_relative_path: str):
     """Compare 2 text files
 
     Args:
-        base_path (str): Base path for compared files
-        file1_name (str): First file to compare
-        file2_name (str): Second file to compare
+        base_directory (str): Base directory for compared files
+        file1_relative_path (str): First file to compare
+        file2_relative_path (str): Second file to compare
     """
     if _PLATFORM != 'Windows':
         return
-    file1_path = os.path.join(base_path, file1_name)
-    file2_path = os.path.join(base_path, file2_name)
-    ret_code = os.system(f'cmd /c fc /N /T "{file1_path}" "{file2_path}"')
+    file1_relative_path = os.path.join(base_directory, file1_relative_path)
+    file2_relative_path = os.path.join(base_directory, file2_relative_path)
+    ret_code = os.system(f'cmd /c fc /N /T "{file1_relative_path}" "{file2_relative_path}"')
     if ret_code != 0:
         print('FC: files are NOT the same!')
 
 
-def read_csv(base_directory: str, file_relative_path: str, encoding: str, column_dtypes: ColumnDtypes) -> pd.DataFrame:
+def read_csv(base_directory: str,
+             file_relative_path: str,
+             encoding: str,
+             na_values: List[str],
+             column_dtypes: ColumnDtypes
+             ) -> pd.DataFrame:
     """Generic CSV Reader."""
     # Create converters to strip whitespace when reading CSV file
     converters = {}
+    usecols = []
     for column in column_dtypes:
         converters[column] = str.strip
+        usecols.append(column)
 
     # Read CSV file and strip whitespaces from all columns
     # os.path.join() doesn't work for S3 files when run from Windows
     file_path = f"{base_directory}/{file_relative_path}"
-    df = pd.read_csv(file_path, sep=',', na_filter=False, converters=converters, encoding=encoding)
+    df = pd.read_csv(file_path, sep=',', na_filter=False, usecols=usecols, converters=converters, encoding=encoding)
 
-    # Remove extraneous columns
-    df.drop(columns=df.columns.difference(column_dtypes, sort=False), inplace=True)
-
-    # Convert empty strings or "NA" to NaN
-    df.replace({"": None, "NA": None}, inplace=True)
-
-    # Remove empty rows
-    df.dropna(how="all", inplace=True)
+    # replace na_values with None
+    to_replace = {na_value: None for na_value in na_values}
+    df.replace(to_replace, inplace=True)
 
     # Convert columns to their specified types
     # for float, sets fractional or scientific notation values to NaN (?)
@@ -286,19 +290,25 @@ def read_csv(base_directory: str, file_relative_path: str, encoding: str, column
         elif dtype == 'category':
             df.loc[:, column] = df[column].astype('category')
 
+    # Remove empty rows
+    df.dropna(how="all", inplace=True)
+
     return df
 
 
-def write_csv(df: pd.DataFrame, csv_name: str, compare: bool = False) -> None:
+def write_csv(df: pd.DataFrame,
+              csv_name: str,
+              compare: bool = False
+              ) -> None:
     """Generic CSV Writer
 
     Args:
         df (pd.DatFrame): dataframe to write
         csv_name (str): prefix of output file name
-        compare (bool): sort and compare output to pre-created sorted flow results
+        compare (bool): sort and compare output to pre-created sorted flow results (only works on Windows)
     """
-    df_file_name = f"{csv_name}.df.csv"
-    df_file_path = f"{_DEBUG_BASE_PATH}/{df_file_name}"
+    df_file_relative_path = f"{csv_name}.df.csv"
+    df_file_path = f"{_DEBUG_BASE_DIRECTORY}/{df_file_relative_path}"
 
     # format float columns as string, ensuring NaNs are None and integers have no decimal point
     output_df = df.copy(deep=True)
@@ -319,9 +329,49 @@ def write_csv(df: pd.DataFrame, csv_name: str, compare: bool = False) -> None:
     output_df.to_csv(df_file_path, sep=',', index=False, encoding=_DEBUG_WRITE_ENCODING,
                      na_rep="", date_format=_CSV_DATE_FORMAT, chunksize=1_000_000)
     if compare:
-        sorted_df_file_name = f"{csv_name}.sorted.df.csv"
-        sort_text_file(_DEBUG_BASE_PATH, df_file_name, sorted_df_file_name)
-        sorted_flow_file_name = f"{csv_name}.sorted.flow.csv"
-        compare_text_files(_DEBUG_BASE_PATH, sorted_df_file_name, sorted_flow_file_name)
+        sorted_df_file_relative_path = f"{csv_name}.sorted.df.csv"
+        sort_text_file(_DEBUG_BASE_DIRECTORY, df_file_relative_path, sorted_df_file_relative_path)
+        sorted_flow_file_relative_path = f"{csv_name}.sorted.flow.csv"
+        compare_text_files(_DEBUG_BASE_DIRECTORY, sorted_df_file_relative_path, sorted_flow_file_relative_path)
 
 
+def compare_df_and_file(df: pd.DataFrame,
+                        csv_name: str,
+                        encoding: str = "utf-8-sig",
+                        na_values: Optional[List[str]] = None):
+    """Compare DataFrame with text file
+
+    Args:
+        df (pd.DataFrame): Dataframe to compare
+        csv_name (str): Text file to compare
+        encoding (str): Encoding for text file
+        na_values (List[str]): Values in text file considered as NA
+    """
+    column_dtypes: ColumnDtypes = {}
+    for column_name, column_dtype in df.dtypes.iteritems():
+        dtype_name = column_dtype.name
+        dtype = None
+        if dtype_name == 'float64':
+            dtype = float
+        elif dtype_name == 'int64':
+            dtype = int
+        elif dtype_name == 'category':
+            dtype = 'category'
+        if dtype is not None:
+            column_dtypes[str(column_name)] = dtype
+
+    file_relative_path = f"{csv_name}.flow.csv"
+    df2 = read_csv(base_directory=_DEBUG_BASE_DIRECTORY,
+                   file_relative_path=file_relative_path,
+                   encoding=encoding,
+                   na_values=na_values if na_values is not None else [""],
+                   column_dtypes=column_dtypes)
+
+    if sorted(list(df.columns)) != sorted(list(df2.columns)):
+        print('Dataframe and file do NOT have the same columns!')
+
+    df2 = df2[df.columns]
+    diff = df.compare(other=df2)
+    if not diff.empty:
+        print('Dataframe and file are NOT the same!')
+        print(diff)

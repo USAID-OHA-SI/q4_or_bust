@@ -15,6 +15,7 @@ from msd_flow import (
     NAT_SUBNAT_FILE_KEY,
     PATH_KEY,
     ENCODING_KEY,
+    NA_VALUES_KEY
 )
 
 FILE_LOCATORS_ZAMBIA_LOCAL = {
@@ -22,88 +23,142 @@ FILE_LOCATORS_ZAMBIA_LOCAL = {
     REF_TABLE_KEY: {
         PATH_KEY: r"Lookup Tables/MSD Ref Tables (Reporting Frequency_Summed vs. Snapshot).csv",
         ENCODING_KEY: "utf-8-sig",
+        NA_VALUES_KEY: [""],
     },
     PARTNER_TYPE_TABLE_KEY: {
-        PATH_KEY: r"Lookup Tables/PartnerType for Tableau - MechID-PartnerType.csv",
-        ENCODING_KEY: "latin1",
+        PATH_KEY: r"Lookup Tables/PartnerType for Tableau.csv",
+        ENCODING_KEY: "utf-8-sig",
+        NA_VALUES_KEY: [""],
     },
     KNOWN_ISSUES_TABLE_KEY: {
         PATH_KEY: r"Lookup Tables/Known Data Issues Ref table.csv",
         ENCODING_KEY: "utf-8-sig",
+        NA_VALUES_KEY: [""],
     },
     PSNU_FILES_KEY: [
         {
-            PATH_KEY: r"MER_Structured_Datasets_PSNU_IM_FY15-18_20210917_v2_1_Zambia.csv",
-            ENCODING_KEY: "latin1",
+            PATH_KEY: r"Inputs/MER_Structured_Datasets_PSNU_IM_FY15-18_20211217_v2_2_Zambia.csv",
+            ENCODING_KEY: "utf-8-sig",
+            NA_VALUES_KEY: [""],
         },
         {
-            PATH_KEY: r"MER_Structured_Datasets_PSNU_IM_FY19-22_20211112_v1_1_Zambia_KK.csv",
+            PATH_KEY: r"Inputs/MER_Structured_Datasets_PSNU_IM_FY19-22_20211217_v2_1_Zambia.csv",
             ENCODING_KEY: "utf-8-sig",
+            NA_VALUES_KEY: [""],
         },
     ],
     NAT_SUBNAT_FILE_KEY: {
-        PATH_KEY: r"MER_Structured_Datasets_NAT_SUBNAT_FY15-22_20211112_v1_1_Zambia.csv",
-        ENCODING_KEY: "latin1",
+        PATH_KEY: r"Inputs/MER_Structured_Datasets_NAT_SUBNAT_FY15-22_20211217_v2_1_Zambia.csv",
+        ENCODING_KEY: "utf-8-sig",
+        NA_VALUES_KEY: [""],
+    },
+}
+
+FILE_LOCATORS_ALL_LOCAL = {
+    BASE_DIRECTORY_KEY: r"C:/Users/khashkes/Documents/USAID_Credence/Projects/DDC/2021 Q4",
+    REF_TABLE_KEY: {
+        PATH_KEY: r"Lookup Tables/MSD Ref Tables (Reporting Frequency_Summed vs. Snapshot).csv",
+        ENCODING_KEY: "utf-8-sig",
+        NA_VALUES_KEY: [""],
+    },
+    PARTNER_TYPE_TABLE_KEY: {
+        PATH_KEY: r"Lookup Tables/PartnerType for Tableau.csv",
+        ENCODING_KEY: "utf-8-sig",
+        NA_VALUES_KEY: [""],
+    },
+    KNOWN_ISSUES_TABLE_KEY: {
+        PATH_KEY: r"Lookup Tables/Known Data Issues Ref table.csv",
+        ENCODING_KEY: "utf-8-sig",
+        NA_VALUES_KEY: [""],
+    },
+    PSNU_FILES_KEY: [
+        {
+            PATH_KEY: r"Inputs/MER_Structured_Datasets_PSNU_IM_FY15-18_20211217_v2_2.csv",
+            ENCODING_KEY: "utf-8-sig",
+            NA_VALUES_KEY: [""],
+        },
+        {
+            PATH_KEY: r"Inputs/MER_Structured_Datasets_PSNU_IM_FY19-22_20211217_v2_1.csv",
+            ENCODING_KEY: "utf-8-sig",
+            NA_VALUES_KEY: [""],
+        },
+    ],
+    NAT_SUBNAT_FILE_KEY: {
+        PATH_KEY: r"Inputs/MER_Structured_Datasets_NAT_SUBNAT_FY15-22_20211217_v2_1.csv",
+        ENCODING_KEY: "utf-8-sig",
+        NA_VALUES_KEY: [""],
     },
 }
 
 FILE_LOCATORS_ZAMBIA_S3 = {
-    BASE_DIRECTORY_KEY: r"s3://e1-appdev-ddc-quaterly-analytics",
+    BASE_DIRECTORY_KEY: r"s3://e1-devtest-ddc-gov-usaid",
     REF_TABLE_KEY: {
-        PATH_KEY: r"Lookup Tables/MSD Ref Tables (Reporting Frequency_Summed vs. Snapshot).csv",
-        ENCODING_KEY: "latin1",
+        PATH_KEY: r"ddc-quarterly-analytics/Lookup Tables/MSD Ref Tables (Reporting Frequency_Summed vs. Snapshot).csv",
+        ENCODING_KEY: "utf-8-sig",
+        NA_VALUES_KEY: [""],
     },
     PARTNER_TYPE_TABLE_KEY: {
-        PATH_KEY: r"Lookup Tables/PartnerType for Tableau - MechID-PartnerType.csv",
+        PATH_KEY: r"ddc-quarterly-analytics/Lookup Tables/PartnerType for Tableau.csv",
         ENCODING_KEY: "latin1",
+        NA_VALUES_KEY: [""],
     },
     KNOWN_ISSUES_TABLE_KEY: {
-        PATH_KEY: r"Lookup Tables/Known Data Issues Ref table.csv",
-        ENCODING_KEY: "latin1",
+        PATH_KEY: r"ddc-quarterly-analytics/Lookup Tables/Known Data Issues Tracker.csv",
+        ENCODING_KEY: "utf-8-sig",
+        NA_VALUES_KEY: [""],
     },
     PSNU_FILES_KEY: [
         {
-            PATH_KEY: r"q4data/q4data_zambia/MER_Structured_Datasets_PSNU_IM_FY15-18_20210917_v2_1_Zambia.csv",
-            ENCODING_KEY: "latin1",
+            PATH_KEY: r"ddc-quarterly-analytics/q4data_zambia/MER_Structured_Datasets_PSNU_IM_FY15-18_20211217_v2_2_Zambia.csv",
+            ENCODING_KEY: "utf-8-sig",
+            NA_VALUES_KEY: [""],
         },
         {
-            PATH_KEY: r"q4data/q4data_zambia/MER_Structured_Datasets_NAT_SUBNAT_FY15-22_20211112_v1_1_Zambia.csv",
+            PATH_KEY: r"ddc-quarterly-analytics/q4data_zambia/MER_Structured_Datasets_PSNU_IM_FY19-22_20211217_v2_1_Zambia.csv",
             ENCODING_KEY: "utf-8-sig",
+            NA_VALUES_KEY: [""],
         },
     ],
     NAT_SUBNAT_FILE_KEY: {
-        PATH_KEY: r"q4data/q4data_zambia/MER_Structured_Datasets_PSNU_IM_FY19-22_20211112_v1_1_Zambia.csv",
-        ENCODING_KEY: "latin1",
+        PATH_KEY: r"ddc-quarterly-analytics/q4data_zambia/MER_Structured_Datasets_NAT_SUBNAT_FY15-22_20211217_v2_1_Zambia.csv",
+        ENCODING_KEY: "utf-8-sig",
+        NA_VALUES_KEY: [""],
     },
 }
 
 FILE_LOCATORS_LATEST_S3 = {
-    BASE_DIRECTORY_KEY: r"s3://e1-appdev-ddc-quaterly-analytics",
+    BASE_DIRECTORY_KEY: r"s3://e1-devtest-ddc-gov-usaid",
     REF_TABLE_KEY: {
-        PATH_KEY: r"MSD Ref Tables (Reporting Frequency_Summed vs. Snapshot).csv",
-        ENCODING_KEY: "latin1",
+        PATH_KEY: r"ddc-quarterly-analytics/Lookup Tables/MSD Ref Tables (Reporting Frequency_Summed vs. Snapshot).csv",
+        ENCODING_KEY: "utf-8-sig",
+        NA_VALUES_KEY: [""],
     },
     PARTNER_TYPE_TABLE_KEY: {
-        PATH_KEY: r"Lookup Tables/PartnerType for Tableau - MechID-PartnerType.csv",
+        PATH_KEY: r"ddc-quarterly-analytics/Lookup Tables/PartnerType for Tableau.csv",
         ENCODING_KEY: "latin1",
+        NA_VALUES_KEY: [""],
     },
     KNOWN_ISSUES_TABLE_KEY: {
-        PATH_KEY: r"Lookup Tables/Known Data Issues Ref table.csv",
+        PATH_KEY: r"ddc-quarterly-analytics/Lookup Tables/Known Data Issues Tracker.csv",
         ENCODING_KEY: "utf-8-sig",
+        NA_VALUES_KEY: [""],
     },
     PSNU_FILES_KEY: [
         {
-            PATH_KEY: r"q4data/q4data_ou/MER_Structured_Datasets_PSNU_IM_FY15_18_20210917_v2_1.csv",
+            PATH_KEY: r"ddc-quarterly-analytics/q4data_ou/MER_Structured_Datasets_PSNU_IM_FY15-18_20211217_v2_2.csv",
             ENCODING_KEY: "utf-8-sig",
+            NA_VALUES_KEY: [""],
         },
         {
-            PATH_KEY: r"q4data/q4data_ou/MER_Structured_Datasets_PSNU_IM_FY19-22_20211112_v1_1.csv",
+            PATH_KEY: r"ddc-quarterly-analytics/q4data_ou/MER_Structured_Datasets_PSNU_IM_FY19-22_20211217_v2_1.csv",
             ENCODING_KEY: "utf-8-sig",
+            NA_VALUES_KEY: [""],
         },
     ],
     NAT_SUBNAT_FILE_KEY: {
-        PATH_KEY: r"q4data/q4data_ou/MER_Structured_Datasets_NAT_SUBNAT_FY15-22_20211112_v1_1.csv",
+        PATH_KEY: r"ddc-quarterly-analytics/q4data_ou/MER_Structured_Datasets_NAT_SUBNAT_FY15-22_20211217_v2_1.csv",
         ENCODING_KEY: "utf-8-sig",
+        NA_VALUES_KEY: [""],
     },
 }
 
@@ -116,10 +171,13 @@ if __name__ == "__main__":
         START_FISCAL_YEAR_KEY: 2017,
         CURRENT_FISCAL_YEAR_KEY: 2021,
         CURRENT_QUARTER_KEY: "Q4",
-        FILE_LOCATORS_KEY: FILE_LOCATORS_ZAMBIA_LOCAL,
+        FILE_LOCATORS_KEY: FILE_LOCATORS_ALL_LOCAL,
     }
 
-    transform(event=event)
+    df = transform(event=event)
 
     end_counter = time.perf_counter()
     print(f"Finished in {end_counter - start_counter:0.4f} seconds!")
+    if len(df) > 0:
+        print(df.head())
+        df.to_csv("processedout.csv", encoding='utf-8', index=False)
