@@ -339,7 +339,7 @@ def compare_df_and_file(df: pd.DataFrame,
                         csv_name: str,
                         encoding: str = "utf-8-sig",
                         na_values: Optional[List[str]] = None):
-    """Compare DataFrame with text file
+    """Compare DataFrame with text file - NOT CURRENTLY USED IN CODE
 
     Args:
         df (pd.DataFrame): Dataframe to compare

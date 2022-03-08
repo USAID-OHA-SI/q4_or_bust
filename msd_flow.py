@@ -1,4 +1,4 @@
-from typing import List, Dict, Type, Union, Any
+from typing import List, Dict, Any
 
 from datetime import datetime
 import numpy as np
@@ -10,6 +10,7 @@ DATA_VERSION_KEY = 'data_version'
 START_FISCAL_YEAR_KEY = 'start_fiscal_year'
 CURRENT_FISCAL_YEAR_KEY = 'current_fiscal_year'
 CURRENT_QUARTER_KEY = 'current_quarter'
+DO_OUTPUT_COL_UPDATE_KEY = 'do_output_col_update'
 FILE_LOCATORS_KEY = 'file_locators'
 BASE_DIRECTORY_KEY = 'base_directory'
 REF_TABLE_KEY = 'ref_table'
@@ -331,7 +332,7 @@ _REUNITE_FLOW_COL_ORDER = [
     'qtr4',
 ]
 
-_CLEAN_FIELDS_COL_RENAME_MAP = {
+_CLEAN_FIELDS_COL_UPDATE_MAP = {
     'Results': 'results',
     'Targets': 'targets',
     'Cumulative': 'cumulative',
@@ -389,7 +390,7 @@ _CLEAN_FIELDS_FLOW_COL_ORDER = [
     'reporting_frequency',
 ]
 
-_UPDATE_FIELD_NAMES_COL_RENAME_MAP = {
+_UPDATE_FIELD_NAMES_COL_UPDATE_MAP = {
     'statushiv': 'Status HIV',
     'statustb': 'Status TB',
     'statuscx': 'Status CX',
@@ -628,7 +629,7 @@ _REMOVE_FUTURE_YEARS_FLOW_COL_ORDER = [
     'Current Quarter',
 ]
 
-_HYPER_ORDER_AND_POSTGRES_COL_RENAME_MAP = {
+_HYPER_ORDER_AND_POSTGRES_COL_UPDATE_MAP = {
     'FY': 'fy',
     'quarter': 'quarter',
     'values': 'values',
@@ -965,7 +966,7 @@ def _clean_fields(input_df: pd.DataFrame) -> pd.DataFrame:
 
     # Create columns for [Results or Targets] values
     df_pivot = df.pivot(columns='Results or Targets', values='values')
-    df_pivot.rename(columns=_CLEAN_FIELDS_COL_RENAME_MAP, inplace=True)
+    df_pivot.rename(columns=_CLEAN_FIELDS_COL_UPDATE_MAP, inplace=True)
     df = df.join(df_pivot, how='outer')
 
     # Filter (exclude)
@@ -1084,7 +1085,7 @@ def _update_field_names(input_df: pd.DataFrame, current_fyq: str) -> pd.DataFram
     utils.set_category_column(df=df, column='Current Quarter', value=current_fyq)
 
     # Rename Fields
-    df.rename(columns=_UPDATE_FIELD_NAMES_COL_RENAME_MAP,
+    df.rename(columns=_UPDATE_FIELD_NAMES_COL_UPDATE_MAP,
               inplace=True)
 
     # Reorder columns to match Tableau flow output
@@ -1390,14 +1391,13 @@ def _remove_future_years(main_df: pd.DataFrame,
     return df
 
 
-def _hyper_order_and_postgres(main_df: pd.DataFrame) -> pd.DataFrame:
-    """Restructure dataframe to match .hyper flow ouptput"""
-    # Reorder columns to match .hyper flow output
-    hyper_flow_order = _HYPER_ORDER_AND_POSTGRES_COL_RENAME_MAP.keys()
-    df = main_df.reindex(columns=hyper_flow_order)
+def _update_output_columns(main_df: pd.DataFrame) -> pd.DataFrame:
+    """Restructure dataframe to match desired ouptput"""
+    # Reorder columns
+    df = main_df.reindex(columns=_HYPER_ORDER_AND_POSTGRES_COL_UPDATE_MAP.keys())
 
-    # Rename Fields
-    df.rename(columns=_HYPER_ORDER_AND_POSTGRES_COL_RENAME_MAP, inplace=True)
+    # Rename columns
+    df.rename(columns=_HYPER_ORDER_AND_POSTGRES_COL_UPDATE_MAP, inplace=True)
 
     return df
 
@@ -1411,6 +1411,7 @@ def transform(event: Dict[str, Any]) -> pd.DataFrame:
             start_fiscal_year (int): Only process data starting in this year (discard earlier years)
             current_fiscal_year (int): Current fiscal year
             current_quarter: Current fiscal quarter
+            do_output_col_update: Change order and names of output columns for e.g. postgres
             file_locators (Dict[str, Any]): Input and output file locations and encodings
                 base_directory (str): Base path for all files. For S3, starts with "S3://bucketname/data_path".
                 ref_table (Dict[str, str]): Dict containing path and encoding for ref table
@@ -1541,7 +1542,9 @@ def transform(event: Dict[str, Any]) -> pd.DataFrame:
     del vlc_df, prev_vlc_df, curr_vlc_df
     # utils.write_csv(main_df, "remove_future", compare=True)
 
-    # Restructure dataframe to match hyper flow output
-    main_df = _hyper_order_and_postgres(main_df=main_df)
-    #utils.write_csv(main_df, "hyper_order_and_postgres", compare=False)
+    # Restructure dataframe to match caller's needs
+    if event[DO_OUTPUT_COL_UPDATE_KEY]:
+        main_df = _update_output_columns(main_df=main_df)
+        # utils.write_csv(df, "hyper_order_and_postgres", compare=False)
+
     return main_df
