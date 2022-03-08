@@ -1,5 +1,5 @@
 import time
-#%env AWS_SECRET_ACCESS_KEY=vsdoWZK2RmTH5J7ghmDhEN7Dcnsvs4FgrHCQm8jS
+#%env AWS_SECRET_ACCESS_KEY=
 import time
 from datetime import datetime
 import pandas as pd
